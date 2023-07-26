@@ -30,6 +30,8 @@
                 </a>
             </div>
 
+            @livewire('listing-search')
+
             <div class="flex items-center">
                 <div class="z-10 p-2 text-right md:p-6 lg:p-6 sm:top-0 sm:right-0">
                     @auth
@@ -58,6 +60,12 @@
             <h1 class="text-4xl font-bold">Welcome to Bullseye Listings</h1>
             <p class="text-lg">Find your dream item/property today!</p>
         </div>
+    </section>
+
+    <!-- Latest Listing Section -->
+    <section class="container p-2 py-12 mx-auto">
+        <h2 class="mb-4 text-2xl font-bold">Latest Listings</h2>
+        @livewire('listing-component')
     </section>
 
     <!-- Footer -->
