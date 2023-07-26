@@ -43,8 +43,8 @@ class Listing extends Model
     /**
      * @return HasOne
      */
-//    public function category(): HasOne
-//    {
-//        return $this->hasOne(Category_::class, 'id', 'category_id');
-//    }
+    public function category(): HasOne
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
 }

@@ -18,6 +18,7 @@
         <div class="p-2">
             <p>
                 <span>{{ $listing->currency }} {{ $listing->price }}</span>
+                <span class="float-right text-xs">{{ $listing->category->name }}</span>
             </p>
             <p>{{ Str::limit($listing->title, 25) }}</p>
             <p>{{ Str::limit($listing->description, 20) }}</p>
