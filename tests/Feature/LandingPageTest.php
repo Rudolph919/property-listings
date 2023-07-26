@@ -1,20 +1,44 @@
 <?php
 
-namespace Tests\Feature;
-
+use App\Http\Livewire\ListingComponent;
+use App\Http\Livewire\ListingSearch;
+use App\Models\Listing;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Support\Str;
+use Livewire\Livewire;
 
-class LandingPageTest extends TestCase
-{
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
+uses(RefreshDatabase::class);
 
-        $response->assertStatus(200);
+it('can see search bar and authentication links', function () {
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSeeLivewire(ListingSearch::class)
+        ->assertSee('Log in')
+        ->assertSee('Register');
+});
+
+it('can display message when no listings has been captured', function () {
+    $this->assertDatabaseCount('listings', 0);
+
+    $this->get('/')
+        ->assertSuccessful()
+        ->assertSeeLivewire(ListingComponent::class)
+        ->assertSee('No listings has been captured on the system.');
+});
+
+it ('can create listings in the database and show listings on the landing page', function () {
+    $countToInsert = 5;
+
+    $listings = Listing::factory()->count($countToInsert)->create();
+
+    $this->assertDatabaseCount('listings', $countToInsert);
+
+    $response = $this->get('/')
+        ->assertSuccessful();
+
+    for ($i = 0; $i < $countToInsert; $i++) {
+        $response->assertSee(Str::limit($listings[$i]->title, 25));
+        $response->assertSee(Str::limit($listings[$i]->description, 20));
     }
-}
+});
+
