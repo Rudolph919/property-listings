@@ -3,17 +3,27 @@
 namespace App\Http\Livewire;
 
 use App\Models\Listing;
+use App\Services\ListingServices;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class ListingComponent extends Component
 {
-    public $listings;
+    protected ListingServices $listingServices;
+
+    public Collection $listings;
 
     protected $listeners = ['searchTriggered'];
 
+
+    public function boot(ListingServices $listingServices)
+    {
+        $this->listingServices = $listingServices;
+    }
+
     public function mount()
     {
-        $this->listings = Listing::orderBy('created_at', 'desc')->take(12)->get();
+        $this->listings = $this->listingServices->getMostRecentListings();
     }
 
     public function render()
