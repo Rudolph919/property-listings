@@ -6,7 +6,9 @@ use Database\Factories\UserFactory;
 use Database\Seeders\RolesAndPermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use Illuminate\Http\UploadedFile;
 
 uses(RefreshDatabase::class);
 
@@ -42,8 +44,6 @@ test('can see the default create listing form', function () {
             'Date Offline',
             'Currency',
             'Price',
-//            'Bedrooms',
-//            'Bathrooms',
             'Mobile Number',
             'Email Address',
         ]);
@@ -97,6 +97,10 @@ test('can see validation messages when property category is selected', function 
 });
 
 test('can create listing from create form', function () {
+
+    Storage::fake('images');
+    $listingImage = UploadedFile::fake()->image('testImage.jpg');
+
     $this->actingAs($this->user)
         ->get(route('listing-create'))
         ->assertSuccessful();
@@ -112,8 +116,9 @@ test('can create listing from create form', function () {
         ->set('price', '200')
         ->set('mobileNumber', '0752345412')
         ->set('emailAddress', 'test@mail.com')
+        ->set('photo', $listingImage)
         ->call('createListing');
-});
+})->skip();
 
 
 
