@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ListingController;
+use App\Http\Livewire\ListingCreate;
+use App\Http\Livewire\ListingShow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +18,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/create-listing', [ListingCreate::class, '__invoke'])
+        ->middleware('auth')
+        ->name('listing-create');
 });

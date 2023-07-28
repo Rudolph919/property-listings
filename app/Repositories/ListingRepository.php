@@ -77,8 +77,19 @@ class ListingRepository
     public function save($data)
     {
         $listing= new $this->listing;
+
+        $listing->category_id = $data['category_id'];
         $listing->title = $data['title'];
         $listing->description = $data['description'];
+        $listing->date_online = $data['date_online'];
+        $listing->date_offline = $data['date_offline'];
+        $listing->price = $data['price'];
+        $listing->currency = $data['currency'];
+        $listing->bedrooms = $data['bedrooms'];
+        $listing->bathrooms = $data['bathrooms'];
+        $listing->contact_details_mobile = $data['contact_details_mobile'];
+        $listing->contact_details_email = $data['contact_details_email'];
+
         $listing->save();
 
         return $listing->fresh();
