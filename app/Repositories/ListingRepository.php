@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Listing;
+use App\Models\ListingImage;
 use Illuminate\Database\Eloquent\Collection;
 
 class ListingRepository
@@ -12,13 +13,17 @@ class ListingRepository
      */
     protected Listing $listing;
 
+    protected ListingImage $listingImage;
+
     /**
      * ListingRepository constructor.
      * @param Listing $listing
+     * @param ListingImage $listingImage
      */
-    public function __construct(Listing $listing)
+    public function __construct(Listing $listing, ListingImage $listingImage)
     {
         $this->listing = $listing;
+        $this->listingImage = $listingImage;
     }
 
     /**
@@ -65,7 +70,7 @@ class ListingRepository
     {
         return $this->listing
             ->where('slug', $slug)
-            ->get();
+            ->first();
     }
 
     /**
@@ -74,10 +79,9 @@ class ListingRepository
      * @param $data
      * @return Listing
      */
-    public function save($data)
+    public function save($data): Listing
     {
-        $listing= new $this->listing;
-
+        $listing = new $this->listing;
         $listing->category_id = $data['category_id'];
         $listing->title = $data['title'];
         $listing->description = $data['description'];
@@ -89,10 +93,17 @@ class ListingRepository
         $listing->bathrooms = $data['bathrooms'];
         $listing->contact_details_mobile = $data['contact_details_mobile'];
         $listing->contact_details_email = $data['contact_details_email'];
-
         $listing->save();
 
-        return $listing->fresh();
+        foreach ($data['listing_images'] as $image) {
+            $listingImage = new $this->listingImage;
+            $listingImage->listing_id = $listing->id;
+            $listingImage->filename = $image['filename'];
+            $listingImage->original_filename = $image['original_filename'];
+            $listingImage->save();
+        }
+
+        return $listing;
     }
 
     /**
@@ -115,7 +126,7 @@ class ListingRepository
     /**
      * Delete Listing
      *
-     * @param $data
+     * @param $id
      * @return Listing
      */
     public function delete($id)

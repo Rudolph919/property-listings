@@ -139,6 +139,31 @@
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 gap-4 mb-4">
+                            <label for="photo" class="block text-sm font-medium text-gray-900">Upload Images</label>
+                            <input id="photo" type="file" multiple wire:model="photo"
+                                class="block w-full text-md text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-1">
+                            @error('photo') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+                        </div>
+
+                        @if($photo)
+                            <label for="photo" class="block mb-2 text-sm font-medium text-gray-900">Image Preview</label>
+                            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-4">
+
+                                @foreach($photo as $image)
+                                    <div class="col-span-1">
+                                        <img src="{{ $image->temporaryUrl() }}" class="" alt="">
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+                        @endif
+
+
+
+
+
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                             Create Listing
                         </button>
@@ -156,8 +181,17 @@
                         <p>{{ $bathrooms }}</p>
                         <p>{{ $mobileNumber }}</p>
                         <p>{{ $emailAddress }}</p>
-                    </div>
 
+                        @if ($photo)
+                            @foreach($photo as $image)
+                                <p>
+                                    {{ $image }}
+                                    <img src="{{ $image->temporaryUrl() }}" class="" alt="">
+                                </p>
+                            @endforeach
+                        @endif
+
+                    </div>
                 </div>
             </div>
         </div>

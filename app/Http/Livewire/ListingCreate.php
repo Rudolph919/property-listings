@@ -6,9 +6,11 @@ use App\Services\CategoryServices;
 use App\Services\ListingServices;
 use Livewire\Component;
 use Illuminate\Support\Collection;
+use Livewire\WithFileUploads;
 
 class ListingCreate extends Component
 {
+    use WithFileUploads;
     protected CategoryServices $categoryServices;
 
     protected ListingServices $listingServices;
@@ -39,6 +41,10 @@ class ListingCreate extends Component
 
     public $showFields = false;
 
+    public $photo = [];
+
+    public $listingImageDetails = [];
+
     protected $rules = [
         'listingCategory' => ['required'],
         'title' => ['required', 'min:3', 'max:255'],
@@ -51,6 +57,7 @@ class ListingCreate extends Component
         'bathrooms' => ['nullable', 'required_if:listingCategory,4'],
         'mobileNumber' => ['required', 'min:10', 'max:12'],
         'emailAddress' => ['required', 'email'],
+        'photo.*' => ['image', 'max:8192']
     ];
 
 
@@ -86,21 +93,44 @@ class ListingCreate extends Component
 
     public function createListing()
     {
-        $this->validate();
+//        $this->validate();
 
-        $this->listingServices->saveListingData([
-            'category_id' => $this->listingCategory,
-            'title' => $this->title,
-            'description' => $this->description,
-            'date_online' => $this->dateOnline,
-            'date_offline' => $this->dateOffline,
-            'price' => $this->price,
-            'currency' => $this->currency,
-            'bedrooms' => $this->bedrooms,
-            'bathrooms' => $this->bathrooms,
-            'contact_details_mobile' => $this->mobileNumber,
-            'contact_details_email' => $this->emailAddress,
-        ]);
+        foreach ($this->photo as $file) {
+            $filename = $file->store('images');
+            $this->listingImageDetails[] = [
+                "filename" => $filename,
+                "original_filename" => $file->getClientOriginalName(),
+            ];
+        }
+
+
+//        try {
+            $listing = $this->listingServices->saveListingData([
+                'category_id' => $this->listingCategory,
+                'title' => $this->title,
+                'description' => $this->description,
+                'date_online' => $this->dateOnline,
+                'date_offline' => $this->dateOffline,
+                'price' => $this->price,
+                'currency' => $this->currency,
+                'bedrooms' => $this->bedrooms,
+                'bathrooms' => $this->bathrooms,
+                'contact_details_mobile' => $this->mobileNumber,
+                'contact_details_email' => $this->emailAddress,
+                'listing_images' => $this->listingImageDetails,
+            ]);
+
+            session()->flash('flash.banner', 'Listing successfully created.');
+            session()->flash('flash.bannerStyle', 'success');
+
+            return redirect('/');
+//        } catch(\Exception $e)
+//        {
+//
+//        }
+
+
+
     }
 
     public function render()

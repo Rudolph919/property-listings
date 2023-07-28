@@ -16,6 +16,10 @@ class Listing extends Model
     use HasFactory;
     use HasSlug;
 
+    protected $with = [
+        'images'
+    ];
+
     protected $fillable = [
         'title',
         'slug',
@@ -25,6 +29,7 @@ class Listing extends Model
         'price',
         'currency',
         'bedrooms',
+        'bathrooms',
         'contact_details_mobile',
         'contact_details_email',
         'category_id',
@@ -46,5 +51,10 @@ class Listing extends Model
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ListingImage::class);
     }
 }

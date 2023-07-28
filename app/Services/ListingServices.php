@@ -48,7 +48,6 @@ class ListingServices
         return $this->listingRepository->getMostRecentListings();
     }
 
-
     /**
      * Get listing by id.
      *
@@ -59,7 +58,6 @@ class ListingServices
     {
         return $this->listingRepository->getListingById($id);
     }
-
 
     /**
      * Get listing by id.
@@ -72,7 +70,6 @@ class ListingServices
         return $this->listingRepository->getListingBySlug($slug);
     }
 
-
     /**
      * Validate listing data.
      * Store to DB if there are no errors.
@@ -82,18 +79,8 @@ class ListingServices
      */
     public function saveListingData(array $data): Listing
     {
-        $validator = Validator::make($data, [
-            'title' => 'required',
-            'description' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            throw new InvalidArgumentException($validator->errors()->first());
-        }
-
         return $this->listingRepository->save($data);
     }
-
 
     /**
      * Update listing data
@@ -105,34 +92,8 @@ class ListingServices
      */
     public function updateListing(array $data, $id): Listing
     {
-        $validator = Validator::make($data, [
-            'title' => 'bail|min:2',
-            'description' => 'bail|max:255'
-        ]);
-
-        if ($validator->fails()) {
-            throw new InvalidArgumentException($validator->errors()->first());
-        }
-
-        DB::beginTransaction();
-
-        try {
-            $post = $this->listingRepository->update($data, $id);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::info($e->getMessage());
-
-            throw new InvalidArgumentException('Unable to update post data');
-        }
-
-        DB::commit();
-
-        return $post;
-
+        return $this->listingRepository->update($data, $id);
     }
-
-
 
     /**
      * Delete post by id.
@@ -142,21 +103,6 @@ class ListingServices
      */
     public function deleteById($id): Listing
     {
-        DB::beginTransaction();
-
-        try {
-            $post = $this->listingRepository->delete($id);
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::info($e->getMessage());
-
-            throw new InvalidArgumentException('Unable to delete post data');
-        }
-
-        DB::commit();
-
-        return $post;
-
+        return $this->listingRepository->delete($id);
     }
 }
