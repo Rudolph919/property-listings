@@ -20,7 +20,8 @@ return new class extends Migration
             $table->date('date_offline');
             $table->string('price');
             $table->string('currency');
-            $table->decimal('bedrooms', 5, 2)->nullable();
+            $table->decimal('bedrooms', 3, 1)->nullable();
+            $table->decimal('bathrooms', 3, 1)->nullable();
             $table->string('contact_details_mobile');
             $table->string('contact_details_email');
             $table->integer('category_id');

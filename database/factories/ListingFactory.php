@@ -25,6 +25,7 @@ class ListingFactory extends Factory
             'price' => rand(1000, 10000),
             'currency' => 'ZAR',
             'bedrooms' => rand(1, 10),
+            'bathrooms' => rand(1, 10),
             'contact_details_mobile' => $this->faker->phoneNumber,
             'contact_details_email' => $this->faker->email,
             'category_id' => rand(1, 4),
