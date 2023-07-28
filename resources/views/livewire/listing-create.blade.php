@@ -160,38 +160,10 @@
                             </div>
                         @endif
 
-
-
-
-
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                             Create Listing
                         </button>
                     </form>
-
-                    <div class="p-8">
-                        <p>{{ $listingCategory }}</p>
-                        <p>{{ $title }}</p>
-                        <p>{{ $description }}</p>
-                        <p>{{ $dateOnline }}</p>
-                        <p>{{ $dateOffline }}</p>
-                        <p>{{ $currency }}</p>
-                        <p>{{ $price }}</p>
-                        <p>{{ $bedrooms }}</p>
-                        <p>{{ $bathrooms }}</p>
-                        <p>{{ $mobileNumber }}</p>
-                        <p>{{ $emailAddress }}</p>
-
-                        @if ($photo)
-                            @foreach($photo as $image)
-                                <p>
-                                    {{ $image }}
-                                    <img src="{{ $image->temporaryUrl() }}" class="" alt="">
-                                </p>
-                            @endforeach
-                        @endif
-
-                    </div>
                 </div>
             </div>
         </div>
