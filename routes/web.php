@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ListingController;
 use App\Http\Livewire\ListingCreate;
+use App\Http\Livewire\ListingList;
 use App\Http\Livewire\ListingShow;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ListingList::class, '__invoke'])
+        ->name('dashboard');
 
     Route::get('/create-listing', [ListingCreate::class, '__invoke'])
         ->middleware('auth')
